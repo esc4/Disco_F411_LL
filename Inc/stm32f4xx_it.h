@@ -46,8 +46,8 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void SysTick_Handler(void);
-void I2C1_EV_IRQHandler(void);
+void EXTI0_IRQHandler(void);
+void EXTI4_IRQHandler(void);
 
 #ifdef __cplusplus
 }

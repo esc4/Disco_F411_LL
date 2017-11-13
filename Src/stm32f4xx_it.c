@@ -35,7 +35,8 @@
 #include "stm32f4xx_it.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "dev.h"
+void EXTI_Callback(uint16_t);
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -43,20 +44,6 @@
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
-
-/**
-* @brief This function handles System tick timer.
-*/
-void SysTick_Handler(void)
-{
-  /* USER CODE BEGIN SysTick_IRQn 0 */
-
-  /* USER CODE END SysTick_IRQn 0 */
-  
-  /* USER CODE BEGIN SysTick_IRQn 1 */
-
-  /* USER CODE END SysTick_IRQn 1 */
-}
 
 /******************************************************************************/
 /* STM32F4xx Peripheral Interrupt Handlers                                    */
@@ -66,20 +53,61 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-* @brief This function handles I2C1 event interrupt.
+* @brief This function handles EXTI line0 interrupt.
 */
-void I2C1_EV_IRQHandler(void)
+void EXTI0_IRQHandler(void)
 {
-  /* USER CODE BEGIN I2C1_EV_IRQn 0 */
+  /* USER CODE BEGIN EXTI0_IRQn 0 */
 
-  /* USER CODE END I2C1_EV_IRQn 0 */
-  
-  /* USER CODE BEGIN I2C1_EV_IRQn 1 */
+  /* USER CODE END EXTI0_IRQn 0 */
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_0) != RESET)
+  {
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_0);
+    /* USER CODE BEGIN LL_EXTI_LINE_0 */
+    EXTI_Callback(LL_EXTI_LINE_0);
+    /* USER CODE END LL_EXTI_LINE_0 */
+  }
+  /* USER CODE BEGIN EXTI0_IRQn 1 */
 
-  /* USER CODE END I2C1_EV_IRQn 1 */
+  /* USER CODE END EXTI0_IRQn 1 */
+}
+
+/**
+* @brief This function handles EXTI line4 interrupt.
+*/
+void EXTI4_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI4_IRQn 0 */
+
+  /* USER CODE END EXTI4_IRQn 0 */
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_4) != RESET)
+  {
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_4);
+    /* USER CODE BEGIN LL_EXTI_LINE_4 */
+    EXTI_Callback(LL_EXTI_LINE_4);
+    /* USER CODE END LL_EXTI_LINE_4 */
+  }
+  /* USER CODE BEGIN EXTI4_IRQn 1 */
+
+  /* USER CODE END EXTI4_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
-
+void EXTI_Callback(uint16_t EXTI_GPIO)
+{
+	switch (EXTI_GPIO)
+	{
+		case LL_EXTI_LINE_4 :
+		{
+			INT1_LSM303_Flag = 1;
+			break;
+		}
+		case LL_EXTI_LINE_0 :
+		{
+			INT_PB_Flag = 1;
+			break;
+		}
+	}
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

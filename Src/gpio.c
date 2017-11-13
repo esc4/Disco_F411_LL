@@ -207,21 +207,21 @@ void MX_GPIO_Init(void)
   /**/
   EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_4;
   EXTI_InitStruct.LineCommand = ENABLE;
-  EXTI_InitStruct.Mode = LL_EXTI_MODE_EVENT;
+  EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
   EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING;
   LL_EXTI_Init(&EXTI_InitStruct);
 
   /**/
   EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_5;
   EXTI_InitStruct.LineCommand = ENABLE;
-  EXTI_InitStruct.Mode = LL_EXTI_MODE_EVENT;
+  EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
   EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING;
   LL_EXTI_Init(&EXTI_InitStruct);
 
   /**/
   EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_0;
   EXTI_InitStruct.LineCommand = ENABLE;
-  EXTI_InitStruct.Mode = LL_EXTI_MODE_EVENT;
+  EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
   EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING;
   LL_EXTI_Init(&EXTI_InitStruct);
 
@@ -255,6 +255,12 @@ void MX_GPIO_Init(void)
 
   /**/
   LL_GPIO_SetPinMode(MEMS_INT2_GPIO_Port, MEMS_INT2_Pin, LL_GPIO_MODE_INPUT);
+
+  /* EXTI interrupt init*/
+  NVIC_SetPriority(EXTI0_IRQn, 0);
+  NVIC_EnableIRQ(EXTI0_IRQn);
+  NVIC_SetPriority(EXTI4_IRQn, 0);
+  NVIC_EnableIRQ(EXTI4_IRQn);
 
 }
 

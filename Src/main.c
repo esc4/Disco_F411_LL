@@ -42,7 +42,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "dev.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -93,13 +93,17 @@ int main(void)
   MX_I2C1_Init();
 
   /* USER CODE BEGIN 2 */
+  ACC_Conf();
 
+  uint8_t rxb[1] ={0};
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+//	  ACC_LedMode();
+	  ModeExecution();
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
