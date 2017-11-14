@@ -205,15 +205,23 @@ void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t s
 		TimeOut = TIME_OUT_INIT;
 
 		/* TXE flag is cleared by writing data in TXDR register */
-		LL_I2C_TransmitData8(I2C1, (*pBuffer++));
+		LL_I2C_TransmitData8(I2C1, (*pBuffer));
+		*pBuffer++;
 		size--;
-
+/*
 		if(LL_I2C_IsActiveFlag_BTF(I2Cx) && (size != 0))
 		{
-			LL_I2C_TransmitData8(I2C1, (*pBuffer++));
+			LL_I2C_TransmitData8(I2C1, (*pBuffer));
+			*pBuffer++;
 			size--;
 		}
+		*/
 	}
+	while(!LL_I2C_IsActiveFlag_TXE(I2C1))
+	{
+		TimeOutChecker(pTimeOut);
+	}
+	TimeOut = TIME_OUT_INIT;
 
 	while(LL_I2C_IsActiveFlag_BTF(I2Cx))
 	{
