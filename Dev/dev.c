@@ -142,7 +142,7 @@ void ModeExecution(void)
 	{
 		uint32_t tick = 0;
 
-		while(tick < 20)
+		while(tick < 200)
 		{
 			switch (CurrentMode)
 			{

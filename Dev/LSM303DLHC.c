@@ -17,7 +17,7 @@ void ACC_Conf()
 
 	uint8_t TxBuffer2[2] = {
 			INT1_CFG_A,
-			0x0A,				/*Reg : INT1_CFG_A (OR detection, X|Y > TH) */
+			0x0A				/*Reg : INT1_CFG_A (OR detection, X|Y > TH) */
 	};
 
 	uint8_t TxBuffer3[3] = {
@@ -26,15 +26,8 @@ void ACC_Conf()
 			0x0A				/*Reg : INT1_DURATION_A ((1/100Hz)*10 = 100ms*/
 	};
 
-
 	I2C_Write(I2C1, ACC_ADD, TxBuffer1, 8);
-
-/*CFG INT1 : OR x axe interrupt */
-
 	I2C_Write(I2C1, ACC_ADD, TxBuffer2, 2);
-
-/*INT1 threshold & duration*/
-
 	I2C_Write(I2C1, ACC_ADD, TxBuffer3, 3);
 }
 

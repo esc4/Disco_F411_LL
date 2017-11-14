@@ -95,7 +95,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   ACC_Conf();
 
-  uint8_t rxb[1] ={0};
+  //uint8_t rxb[1] ={0};
+  //I2C_Read(I2C1,ACC_ADD, INT1_CFG_A, rxb,1);
   /* USER CODE END 2 */
 
   /* Infinite loop */

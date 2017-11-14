@@ -13,7 +13,6 @@
 
 #include "LSM303DLHC.h"
 
-
 #define TIME_OUT_INIT 10U
 
 typedef enum userMode {
@@ -21,7 +20,6 @@ typedef enum userMode {
 	Compass
 } userMode;
 
-/*Globals*/
 extern uint8_t INT1_LSM303_Flag;
 extern uint8_t INT_PB_Flag;
 extern userMode CurrentMode;
