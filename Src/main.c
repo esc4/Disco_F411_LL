@@ -85,7 +85,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -95,28 +95,14 @@ int main(void)
   /* USER CODE BEGIN 2 */
   ACC_Conf();
 
-  //uint8_t rxb[1] ={0};
-  //I2C_Read(I2C1,ACC_ADD, INT1_CFG_A, rxb,1);
-
-//  LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_0);
-//  LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_4);
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//	  ACC_LedMode();
 	  ModeExecution();
-	  if(LL_GPIO_IsInputPinSet(GPIOE, LL_GPIO_PIN_4))
-	  {
-		  LL_GPIO_SetOutputPin(GPIOD, LD4_Pin);
-	  }
-	  else
-	  {
-		 LL_GPIO_ResetOutputPin(GPIOD, LD4_Pin);
-	  }
+
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */

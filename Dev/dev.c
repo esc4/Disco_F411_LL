@@ -142,7 +142,7 @@ void ModeExecution(void)
 	{
 		uint32_t tick = 0;
 
-		while(tick < 200)
+		while(tick < 15)
 		{
 			switch (CurrentMode)
 			{
@@ -166,8 +166,8 @@ void ModeExecution(void)
 		}
 		DEV_LedClear();
 		DEV_LedInterlude2();
+		INT1_LSM303_Flag = 0;
 	}
-	INT1_LSM303_Flag = 0;
 }
 
 void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t size)
@@ -177,7 +177,6 @@ void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t s
 	LL_I2C_AcknowledgeNextData(I2Cx, LL_I2C_ACK);
 	LL_I2C_GenerateStartCondition(I2Cx);
 
-	/* Loop until SB flag is raised  */
 	while(!LL_I2C_IsActiveFlag_SB(I2Cx))
 	{
 		TimeOutChecker(pTimeOut);
@@ -186,14 +185,12 @@ void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t s
 
 	LL_I2C_TransmitData8(I2Cx, slave_add);
 
-	/* Loop until ADDR flag is raised  */
 	while(!LL_I2C_IsActiveFlag_ADDR(I2Cx))
 	{
 		TimeOutChecker(pTimeOut);
 	}
 	TimeOut = TIME_OUT_INIT;
 
-	/* Clear ADDR flag value in ISR register */
 	LL_I2C_ClearFlag_ADDR(I2Cx);
 
 	while(size > 0)
@@ -204,15 +201,14 @@ void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t s
 		}
 		TimeOut = TIME_OUT_INIT;
 
-		/* TXE flag is cleared by writing data in TXDR register */
 		LL_I2C_TransmitData8(I2C1, (*pBuffer));
-		*pBuffer++;
+		pBuffer++;
 		size--;
 /*
 		if(LL_I2C_IsActiveFlag_BTF(I2Cx) && (size != 0))
 		{
 			LL_I2C_TransmitData8(I2C1, (*pBuffer));
-			*pBuffer++;
+			pBuffer++;
 			size--;
 		}
 		*/
@@ -328,7 +324,6 @@ void I2C_Read(I2C_TypeDef * I2Cx, uint8_t slave_add, uint8_t reg, uint8_t * pBuf
 				}
 				TimeOut = TIME_OUT_INIT;
 
-				/* RXNE flag is cleared by reading data in DR register */
 				pBuffer[BufferIndex++] = LL_I2C_ReceiveData8(I2Cx);
 				RemainingByte --;
 			}
