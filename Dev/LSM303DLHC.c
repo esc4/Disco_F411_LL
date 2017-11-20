@@ -1,6 +1,4 @@
 #include "LSM303DLHC.h"
-#include "dev.h"
-#include "i2c.h"
 
 void ACC_Conf()
 {

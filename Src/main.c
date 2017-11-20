@@ -39,6 +39,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "i2c.h"
+#include "spi.h"
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
@@ -91,9 +92,16 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
+  MX_SPI1_Init();
 
   /* USER CODE BEGIN 2 */
+  LL_SPI_Enable(SPI1);
+  L3GD20_Conf();
   ACC_Conf();
+
+ int16_t gx = 0;
+ int16_t gy = 0;
+ int16_t gz = 0;
 
   /* USER CODE END 2 */
 
@@ -101,7 +109,41 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  ModeExecution();
+	  L3GD20_GetXYZ(&gx, &gy, &gz);
+
+	  if(gx < -20)
+	  	{
+	  	LL_GPIO_SetOutputPin(GPIOD,LD6_Pin);
+	  	LL_GPIO_ResetOutputPin(GPIOD,LD3_Pin);
+	  	}
+	  	else if(gx > 20)
+	  	{
+	  	LL_GPIO_SetOutputPin(GPIOD,LD3_Pin);
+	  	LL_GPIO_ResetOutputPin(GPIOD,LD6_Pin);
+	  	}
+	  	else
+	  	{
+	  	LL_GPIO_ResetOutputPin(GPIOD,LD6_Pin);
+	  	LL_GPIO_ResetOutputPin(GPIOD,LD3_Pin);
+	  	}
+	  //Y axe
+	  	if(gy < -20)
+	  	{
+	  	LL_GPIO_SetOutputPin(GPIOD,LD5_Pin);
+	  	LL_GPIO_ResetOutputPin(GPIOD,LD4_Pin);
+	  	}
+	  	else if(gy > 20)
+	  	{
+	  	LL_GPIO_SetOutputPin(GPIOD,LD4_Pin);
+	  	LL_GPIO_ResetOutputPin(GPIOD,LD5_Pin);
+	  	}
+	  	else
+	  	{
+	  	LL_GPIO_ResetOutputPin(GPIOD,LD4_Pin);
+	  	LL_GPIO_ResetOutputPin(GPIOD,LD5_Pin);
+	  	}
+
+	  //ModeExecution();
 
   /* USER CODE END WHILE */
 

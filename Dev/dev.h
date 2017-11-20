@@ -10,8 +10,9 @@
 
 #include "main.h"
 #include "i2c.h"
-
+#include "drivers.h"
 #include "LSM303DLHC.h"
+#include "L3GD20.h"
 
 #define TIME_OUT_INIT 10U
 
@@ -23,6 +24,7 @@ typedef enum userMode {
 extern uint8_t INT1_LSM303_Flag;
 extern uint8_t INT_PB_Flag;
 extern userMode CurrentMode;
+extern uint8_t TimeOut;
 extern uint8_t* pTimeOut;
 
 /*App functions*/
@@ -33,11 +35,8 @@ void DEV_LedClear();
 void DEV_LedModeAcc();
 void DEV_LedModeMag();
 
-/*Driver functions*/
-void I2C_Write(I2C_TypeDef*,uint8_t, uint8_t*, uint8_t);
-void I2C_Read(I2C_TypeDef*,uint8_t, uint8_t,uint8_t*, uint8_t);
-
 /* Helper functions*/
+void TimeOutChecker(uint8_t*);
 void ErrorHandler(void);
 void DEBUG_LED_Status_OK(void);
 int16_t ConvertTwoComplement(uint16_t);

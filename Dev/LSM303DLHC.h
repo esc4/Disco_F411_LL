@@ -1,5 +1,4 @@
 #ifndef __LSM303_H
-
 #define __LSM303_H
 
 #include "dev.h"
