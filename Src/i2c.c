@@ -57,9 +57,9 @@ void MX_I2C1_Init(void)
   PB6   ------> I2C1_SCL
   PB9   ------> I2C1_SDA 
   */
-  GPIO_InitStruct.Pin = Audio_SCL_Pin|Audio_SDA_Pin;
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_6|LL_GPIO_PIN_9;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
   GPIO_InitStruct.Alternate = LL_GPIO_AF_4;

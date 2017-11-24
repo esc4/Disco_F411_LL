@@ -191,16 +191,14 @@ void SystemClock_Config(void)
   }
   LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE1);
 
-  LL_RCC_HSI_SetCalibTrimming(16);
+  LL_RCC_HSE_Enable();
 
-  LL_RCC_HSI_Enable();
-
-   /* Wait till HSI is ready */
-  while(LL_RCC_HSI_IsReady() != 1)
+   /* Wait till HSE is ready */
+  while(LL_RCC_HSE_IsReady() != 1)
   {
     
   }
-  LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSI, LL_RCC_PLLM_DIV_8, 192, LL_RCC_PLLP_DIV_4);
+  LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSE, LL_RCC_PLLM_DIV_8, 400, LL_RCC_PLLP_DIV_4);
 
   LL_RCC_PLL_Enable();
 
@@ -211,9 +209,9 @@ void SystemClock_Config(void)
   }
   LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
 
-  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_4);
+  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_2);
 
-  LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_2);
+  LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
 
   LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL);
 
@@ -222,11 +220,11 @@ void SystemClock_Config(void)
   {
   
   }
-  LL_Init1msTick(96000000);
+  LL_Init1msTick(100000000);
 
   LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
 
-  LL_SetSystemCoreClock(96000000);
+  LL_SetSystemCoreClock(100000000);
 
   LL_RCC_SetTIMPrescaler(LL_RCC_TIM_PRESCALER_TWICE);
 

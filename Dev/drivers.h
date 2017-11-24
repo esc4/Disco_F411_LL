@@ -13,8 +13,8 @@
 void I2C_Write(I2C_TypeDef*,uint8_t, uint8_t*, uint8_t);
 void I2C_Read(I2C_TypeDef*,uint8_t, uint8_t,uint8_t*, uint8_t);
 
-void SPI_FullDuplex(SPI_TypeDef* SPIx, GPIO_TypeDef* NSS_port, uint16_t NSS_GPIO, uint8_t* pTxBuffer, uint8_t txSize, uint8_t* pRxBuffer, uint8_t rxSize);
-
+void SPI_Write(SPI_TypeDef* SPIx, GPIO_TypeDef* NSS_port, uint16_t NSS_GPIO, uint8_t* pTxBuffer, uint8_t txSize);
+void SPI_ReadReg(SPI_TypeDef* SPIx, GPIO_TypeDef* NSS_port, uint16_t NSS_GPIO, uint8_t reg, uint8_t* pRxBuffer, uint8_t rxSize);
 
 
 #endif /* DRIVERS_H_ */

@@ -225,27 +225,41 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 	//LED_Status_OK();
 }
 
-void SPI_FullDuplex(SPI_TypeDef* SPIx, GPIO_TypeDef* NSS_port, uint16_t NSS_GPIO, uint8_t* pTxBuffer, uint8_t txSize, uint8_t* pRxBuffer, uint8_t rxSize)
+void SPI_Write(SPI_TypeDef* SPIx, GPIO_TypeDef* NSS_port, uint16_t NSS_GPIO, uint8_t* pTxBuffer, uint8_t txSize)
 {
-	LL_SPI_SetMode(SPIx, LL_SPI_MODE_MASTER);
+	//LL_SPI_SetTransferDirection(SPIx, LL_SPI_HALF_DUPLEX_TX);
 	LL_GPIO_ResetOutputPin(NSS_port, NSS_GPIO);
-	while(rxSize > 0 || txSize > 0)
+	while(txSize > 0)
 	  {
-	    /* Check TXE flag to transmit data */
 	    if(( LL_SPI_IsActiveFlag_TXE(SPIx)) && (txSize > 0))
 	    {
-	      /* Transmit 16bit Data */
 	      LL_SPI_TransmitData8(SPIx, *pTxBuffer++);
 	      txSize--;
 	    }
-	    /* Check RXE flag */
-	    if(LL_SPI_IsActiveFlag_RXNE(SPIx))
-	    {
-	      /* Receive 16bit Data */
-	      *pRxBuffer++ = LL_SPI_ReceiveData8(SPIx);
-	      rxSize--;
-	    }
 	  }
 	  LL_GPIO_SetOutputPin(NSS_port, NSS_GPIO);
+}
+
+void SPI_ReadReg(SPI_TypeDef* SPIx, GPIO_TypeDef* NSS_port, uint16_t NSS_GPIO, uint8_t reg, uint8_t* pRxBuffer, uint8_t rxSize)
+{
+	TimeOut = TIME_OUT_INIT;
+
+	//LL_SPI_SetTransferDirection(SPIx, LL_SPI_HALF_DUPLEX_TX);
+	LL_GPIO_ResetOutputPin(NSS_port, NSS_GPIO);
+    if(LL_SPI_IsActiveFlag_TXE(SPIx))
+    {
+    	LL_SPI_TransmitData8(SPIx, reg);
+		LL_mDelay(20);
+		//LL_SPI_SetTransferDirection(SPIx, LL_SPI_HALF_DUPLEX_RX);
+		while(rxSize > 0)
+		  {
+			if(LL_SPI_IsActiveFlag_RXNE(SPIx))
+			{
+			  *pRxBuffer++ = LL_SPI_ReceiveData8(SPIx);
+			  rxSize--;
+			}
+		  }
+		  LL_GPIO_SetOutputPin(NSS_port, NSS_GPIO);
+    }
 }
 
