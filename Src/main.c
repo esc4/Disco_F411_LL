@@ -109,6 +109,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  //testg
 	  L3GD20_GetXYZ(&gx, &gy, &gz);
 
 	  if(gx < -20)
