@@ -11,7 +11,8 @@
 
 void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t size)
 {
-	TimeOut = TIME_OUT_INIT;
+	uint8_t timeOut = TIME_OUT_INIT;
+	uint8_t* pTimeOut = &timeOut;
 
 	LL_I2C_AcknowledgeNextData(I2Cx, LL_I2C_ACK);
 	LL_I2C_GenerateStartCondition(I2Cx);
@@ -20,7 +21,7 @@ void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t s
 	{
 		TimeOutChecker(pTimeOut);
 	}
-	TimeOut = TIME_OUT_INIT;
+	timeOut = TIME_OUT_INIT;
 
 	LL_I2C_TransmitData8(I2Cx, slave_add);
 
@@ -28,7 +29,7 @@ void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t s
 	{
 		TimeOutChecker(pTimeOut);
 	}
-	TimeOut = TIME_OUT_INIT;
+	timeOut = TIME_OUT_INIT;
 
 	LL_I2C_ClearFlag_ADDR(I2Cx);
 
@@ -38,7 +39,7 @@ void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t s
 		{
 			TimeOutChecker(pTimeOut);
 		}
-		TimeOut = TIME_OUT_INIT;
+		timeOut = TIME_OUT_INIT;
 
 		LL_I2C_TransmitData8(I2C1, (*pBuffer++));
 		size--;
@@ -55,13 +56,13 @@ void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t s
 	{
 		TimeOutChecker(pTimeOut);
 	}
-	TimeOut = TIME_OUT_INIT;
+	timeOut = TIME_OUT_INIT;
 
 	while(LL_I2C_IsActiveFlag_BTF(I2Cx))
 	{
 		TimeOutChecker(pTimeOut);
 	}
-	TimeOut = TIME_OUT_INIT;
+	timeOut = TIME_OUT_INIT;
 
 	LL_I2C_GenerateStopCondition(I2Cx);
 	//DEBUG_LED_Status_OK();
@@ -69,7 +70,9 @@ void I2C_Write(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t* pBuffer, uint8_t s
 
 void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffer, uint8_t size)
 {
-	TimeOut = TIME_OUT_INIT;
+	uint8_t timeOut = TIME_OUT_INIT;
+	uint8_t* pTimeOut = &timeOut;
+
 	uint8_t RemainingByte = size;
 	uint8_t BufferIndex = 0;
 
@@ -81,7 +84,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 	{
 		TimeOutChecker(pTimeOut);
 	}
-	TimeOut = TIME_OUT_INIT;
+	timeOut = TIME_OUT_INIT;
 
 	/*** Send slave address in WRITE mode ***/
 	LL_I2C_TransmitData8(I2Cx, slave_add | 0x00);
@@ -90,7 +93,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 	{
 		TimeOutChecker(pTimeOut);
 	}
-	TimeOut = TIME_OUT_INIT;
+	timeOut = TIME_OUT_INIT;
 
 	LL_I2C_ClearFlag_ADDR(I2Cx);
 
@@ -99,7 +102,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 	{
 		TimeOutChecker(pTimeOut);
 	}
-	TimeOut = TIME_OUT_INIT;
+	timeOut = TIME_OUT_INIT;
 
 	LL_I2C_TransmitData8(I2Cx, reg);
 
@@ -107,7 +110,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 	{
 		TimeOutChecker(pTimeOut);
 	}
-	TimeOut = TIME_OUT_INIT;
+	timeOut = TIME_OUT_INIT;
 
 	/*** ReStart generate ***/
 	LL_I2C_GenerateStartCondition(I2Cx);
@@ -116,7 +119,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 	{
 		TimeOutChecker(pTimeOut);
 	}
-	TimeOut = TIME_OUT_INIT;
+	timeOut = TIME_OUT_INIT;
 
 	/*** Send slave address in READ mode ***/
 	LL_I2C_TransmitData8(I2Cx, slave_add | 0x01);
@@ -125,7 +128,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 	{
 		TimeOutChecker(pTimeOut);
 	}
-	TimeOut = TIME_OUT_INIT;
+	timeOut = TIME_OUT_INIT;
 
 	/*** Receive data ***/
 	if(RemainingByte == 0)
@@ -160,7 +163,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 				{
 					TimeOutChecker(pTimeOut);
 				}
-				TimeOut = TIME_OUT_INIT;
+				timeOut = TIME_OUT_INIT;
 
 				pBuffer[BufferIndex++] = LL_I2C_ReceiveData8(I2Cx);
 				RemainingByte --;
@@ -171,7 +174,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 				{
 					TimeOutChecker(pTimeOut);
 				}
-				TimeOut = TIME_OUT_INIT;
+				timeOut = TIME_OUT_INIT;
 
 				LL_I2C_GenerateStopCondition(I2Cx);
 				pBuffer[BufferIndex++] = LL_I2C_ReceiveData8(I2Cx);
@@ -185,7 +188,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 				{
 					TimeOutChecker(pTimeOut);
 				}
-				TimeOut = TIME_OUT_INIT;
+				timeOut = TIME_OUT_INIT;
 
 				LL_I2C_AcknowledgeNextData(I2Cx, LL_I2C_NACK);
 				pBuffer[BufferIndex++] = LL_I2C_ReceiveData8(I2Cx);
@@ -195,7 +198,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 				{
 					TimeOutChecker(pTimeOut);
 				}
-				TimeOut = TIME_OUT_INIT;
+				timeOut = TIME_OUT_INIT;
 
 				LL_I2C_GenerateStopCondition(I2Cx);
 				pBuffer[BufferIndex++] = LL_I2C_ReceiveData8(I2Cx);
@@ -210,7 +213,7 @@ void I2C_Read(I2C_TypeDef* I2Cx, uint8_t slave_add, uint8_t reg, uint8_t* pBuffe
 			{
 				TimeOutChecker(pTimeOut);
 			}
-			TimeOut = TIME_OUT_INIT;
+			timeOut = TIME_OUT_INIT;
 
 			pBuffer[BufferIndex++] = LL_I2C_ReceiveData8(I2Cx);
 			RemainingByte --;
@@ -242,8 +245,6 @@ void SPI_Write(SPI_TypeDef* SPIx, GPIO_TypeDef* NSS_port, uint16_t NSS_GPIO, uin
 
 void SPI_ReadReg(SPI_TypeDef* SPIx, GPIO_TypeDef* NSS_port, uint16_t NSS_GPIO, uint8_t reg, uint8_t* pRxBuffer, uint8_t rxSize)
 {
-	TimeOut = TIME_OUT_INIT;
-
 	//LL_SPI_SetTransferDirection(SPIx, LL_SPI_HALF_DUPLEX_TX);
 	LL_GPIO_ResetOutputPin(NSS_port, NSS_GPIO);
     if(LL_SPI_IsActiveFlag_TXE(SPIx))

@@ -110,42 +110,42 @@ int main(void)
   while (1)
   {
 	  //testg
-	  L3GD20_GetXYZ(&gx, &gy, &gz);
-
-	  if(gx < -20)
-	  	{
-	  	LL_GPIO_SetOutputPin(GPIOD,LD6_Pin);
-	  	LL_GPIO_ResetOutputPin(GPIOD,LD3_Pin);
-	  	}
-	  	else if(gx > 20)
-	  	{
-	  	LL_GPIO_SetOutputPin(GPIOD,LD3_Pin);
-	  	LL_GPIO_ResetOutputPin(GPIOD,LD6_Pin);
-	  	}
-	  	else
-	  	{
-	  	LL_GPIO_ResetOutputPin(GPIOD,LD6_Pin);
-	  	LL_GPIO_ResetOutputPin(GPIOD,LD3_Pin);
-	  	}
-	  //Y axe
-	  	if(gy < -20)
-	  	{
-	  	LL_GPIO_SetOutputPin(GPIOD,LD5_Pin);
-	  	LL_GPIO_ResetOutputPin(GPIOD,LD4_Pin);
-	  	}
-	  	else if(gy > 20)
-	  	{
-	  	LL_GPIO_SetOutputPin(GPIOD,LD4_Pin);
-	  	LL_GPIO_ResetOutputPin(GPIOD,LD5_Pin);
-	  	}
-	  	else
-	  	{
-	  	LL_GPIO_ResetOutputPin(GPIOD,LD4_Pin);
-	  	LL_GPIO_ResetOutputPin(GPIOD,LD5_Pin);
-	  	}
+//	  L3GD20_GetXYZ(&gx, &gy, &gz);
+//
+//	  if(gx < -20)
+//	  	{
+//	  	LL_GPIO_SetOutputPin(GPIOD,LD6_Pin);
+//	  	LL_GPIO_ResetOutputPin(GPIOD,LD3_Pin);
+//	  	}
+//	  	else if(gx > 20)
+//	  	{
+//	  	LL_GPIO_SetOutputPin(GPIOD,LD3_Pin);
+//	  	LL_GPIO_ResetOutputPin(GPIOD,LD6_Pin);
+//	  	}
+//	  	else
+//	  	{
+//	  	LL_GPIO_ResetOutputPin(GPIOD,LD6_Pin);
+//	  	LL_GPIO_ResetOutputPin(GPIOD,LD3_Pin);
+//	  	}
+//	  //Y axe
+//	  	if(gy < -20)
+//	  	{
+//	  	LL_GPIO_SetOutputPin(GPIOD,LD5_Pin);
+//	  	LL_GPIO_ResetOutputPin(GPIOD,LD4_Pin);
+//	  	}
+//	  	else if(gy > 20)
+//	  	{
+//	  	LL_GPIO_SetOutputPin(GPIOD,LD4_Pin);
+//	  	LL_GPIO_ResetOutputPin(GPIOD,LD5_Pin);
+//	  	}
+//	  	else
+//	  	{
+//	  	LL_GPIO_ResetOutputPin(GPIOD,LD4_Pin);
+//	  	LL_GPIO_ResetOutputPin(GPIOD,LD5_Pin);
+//	  	}
 
 	  //ModeExecution();
-
+	  MAG_CompassMode();
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */

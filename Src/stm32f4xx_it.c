@@ -104,7 +104,7 @@ void EXTI_Callback(uint16_t EXTI_GPIO)
 		}
 		case LL_EXTI_LINE_0 :
 		{
-			CurrentMode = !CurrentMode;
+			SwitchMode();
 			break;
 		}
 	}

@@ -1,5 +1,6 @@
 #include "LSM303DLHC.h"
 
+/**** Accelerometer ****/
 void ACC_Conf()
 {
 	uint8_t TxBuffer1[8] = {
@@ -27,18 +28,6 @@ void ACC_Conf()
 	I2C_Write(I2C1, ACC_ADD, TxBuffer1, 8);
 	I2C_Write(I2C1, ACC_ADD, TxBuffer2, 2);
 	I2C_Write(I2C1, ACC_ADD, TxBuffer3, 3);
-}
-
-void MAG_Conf()
-{
-	uint8_t TxBufferMAGconf[4] = {
-			CRA_REG_M,			/*Auto increment*/
-			0x90,				/* [Temp enable, ODR : 15Hz] [Range +/- 1.3 Gauss] [Continuous-conversion mode] */
-			0x20,
-			0x00
-	};
-
-	I2C_Write(I2C1, MAG_ADD, TxBufferMAGconf, 4);
 }
 
 void ACC_GetXYZ(int16_t* pX, int16_t* pY, int16_t* pZ)
@@ -93,6 +82,19 @@ void ACC_LedMode()
 	}
 }
 
+/**** Magnetometer ****/
+void MAG_Conf()
+{
+	uint8_t TxBufferMAGconf[4] = {
+			CRA_REG_M,			/*Auto increment*/
+			0x90,				/* [Temp enable, ODR : 15Hz] [Range +/- 1.3 Gauss] [Continuous-conversion mode] */
+			0x20,
+			0x00
+	};
+
+	I2C_Write(I2C1, MAG_ADD, TxBufferMAGconf, 4);
+}
+
 void MAG_GetXYZ(int16_t* pX, int16_t* pY, int16_t* pZ)
 {
 	uint8_t RxBufferMAG[6] = {0,0,0,0,0,0};
@@ -101,6 +103,7 @@ void MAG_GetXYZ(int16_t* pX, int16_t* pY, int16_t* pZ)
 	*pX = (RxBufferMAG[0]<<8) | RxBufferMAG[1] ;	// Divide by 1100 to convert in Gauss
 	*pZ = (RxBufferMAG[2]<<8) | RxBufferMAG[3] ;	// Divide by 980 to convert in Gauss
 	*pY = (RxBufferMAG[4]<<8) | RxBufferMAG[5] ;	// Divide by 1100 to convert in Gauss
+	LL_mDelay(1);
 }
 
 void MAG_GetTemp(int16_t* pT)
