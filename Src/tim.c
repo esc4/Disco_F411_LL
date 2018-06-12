@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : SPI.c
+  * File Name          : TIM.c
   * Description        : This file provides code for the configuration
-  *                      of the SPI instances.
+  *                      of the TIM instances.
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
@@ -38,49 +38,62 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "spi.h"
-
-#include "gpio.h"
+#include "tim.h"
 
 /* USER CODE BEGIN 0 */
 
+// PWMres = 100 step
+// PWMFreq = 100 Hz
+
+// counterFreq = PWMres * PWMFreq = 10000
+// prescalar = 100 000 000 / countFreq - 1
+// prescalar = 9999
+// ARR = PWMres - 1
+// ARR = 99
+
 /* USER CODE END 0 */
 
-/* SPI1 init function */
-void MX_SPI1_Init(void)
+/* TIM4 init function */
+void MX_TIM4_Init(void)
 {
-  LL_SPI_InitTypeDef SPI_InitStruct;
+  LL_TIM_InitTypeDef TIM_InitStruct;
+  LL_TIM_OC_InitTypeDef TIM_OC_InitStruct;
 
   LL_GPIO_InitTypeDef GPIO_InitStruct;
   /* Peripheral clock enable */
-  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SPI1);
-  
-  /**SPI1 GPIO Configuration  
-  PA5   ------> SPI1_SCK
-  PA6   ------> SPI1_MISO
-  PA7   ------> SPI1_MOSI 
-  */
-  GPIO_InitStruct.Pin = SPI1_SCK_Pin|SPI1_MISO_Pin|SPI1_MOSI_Pin;
+  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM4);
+
+  TIM_InitStruct.Prescaler = 9999;
+  TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
+  TIM_InitStruct.Autoreload = 99;
+  TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
+  LL_TIM_Init(TIM4, &TIM_InitStruct);
+
+  LL_TIM_OC_EnablePreload(TIM4, LL_TIM_CHANNEL_CH4);
+
+  TIM_OC_InitStruct.OCMode = LL_TIM_OCMODE_PWM1;
+  TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_ENABLE;
+  TIM_OC_InitStruct.OCNState = LL_TIM_OCSTATE_DISABLE;
+  TIM_OC_InitStruct.CompareValue = 50;
+  TIM_OC_InitStruct.OCPolarity = LL_TIM_OCPOLARITY_HIGH;
+  LL_TIM_OC_Init(TIM4, LL_TIM_CHANNEL_CH4, &TIM_OC_InitStruct);
+
+  LL_TIM_OC_DisableFast(TIM4, LL_TIM_CHANNEL_CH4);
+
+  LL_TIM_SetTriggerOutput(TIM4, LL_TIM_TRGO_RESET);
+
+  LL_TIM_DisableMasterSlaveMode(TIM4);
+
+    /**TIM4 GPIO Configuration    
+    PD15     ------> TIM4_CH4 
+    */
+  GPIO_InitStruct.Pin = LD6_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-  GPIO_InitStruct.Alternate = LL_GPIO_AF_5;
-  LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  SPI_InitStruct.TransferDirection = LL_SPI_FULL_DUPLEX;
-  SPI_InitStruct.Mode = LL_SPI_MODE_MASTER;
-  SPI_InitStruct.DataWidth = LL_SPI_DATAWIDTH_8BIT;
-  SPI_InitStruct.ClockPolarity = LL_SPI_POLARITY_LOW;
-  SPI_InitStruct.ClockPhase = LL_SPI_PHASE_1EDGE;
-  SPI_InitStruct.NSS = LL_SPI_NSS_SOFT;
-  SPI_InitStruct.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV128;
-  SPI_InitStruct.BitOrder = LL_SPI_MSB_FIRST;
-  SPI_InitStruct.CRCCalculation = LL_SPI_CRCCALCULATION_DISABLE;
-  SPI_InitStruct.CRCPoly = 10;
-  LL_SPI_Init(SPI1, &SPI_InitStruct);
-
-  LL_SPI_SetStandard(SPI1, LL_SPI_PROTOCOL_MOTOROLA);
+  GPIO_InitStruct.Alternate = LL_GPIO_AF_2;
+  LL_GPIO_Init(LD6_GPIO_Port, &GPIO_InitStruct);
 
 }
 
